@@ -7,6 +7,38 @@ import paramiko
 from paramiko import BadAuthenticationType
 from botocore.exceptions import ClientError
 
+
+""" list the instance and delete the instance"""
+import boto3
+
+ec3_instance = boto3.client("ec2", region_name = "ap-southeast-1")
+instances = ec3_instance.describe_instances(Filters=[
+    {
+        "Name": "instance-state-name",
+        "Values": ["running"]
+    }
+    ])
+#print(Reservations)
+print(instances)
+
+for inst in instances['Reservations']:
+    for pythoninst in inst['Instances']:
+        print(pythoninst['PublicDnsName'], pythoninst['InstanceType'], pythoninst['InstanceId'])
+        ids = pythoninst['InstanceId']
+        print(ids)
+        ec2 = boto3.client("ec2", region_name = "ap-southeast-1")
+        c = ec2.terminate_instances(InstanceIds=[ids])
+        print(c)
+
+time.sleep(80)
+"""To list all the security group """
+client = boto3.client('ec2')
+output = client.describe_security_groups()
+print(output)
+reponse = client.delete_security_group( GroupName='Venkat_SG')
+print(reponse)
+
+
 """ Creating the Security Group for the EC2 instance """
 ec2 = boto3.client('ec2')
 
@@ -33,7 +65,7 @@ try:
              'ToPort': 22,
              'IpRanges': [{'CidrIp': '0.0.0.0/0'}]}
         ])
-    #print('Ingress Successfully Set %s' % data)
+   #print('Ingress Successfully Set %s' % data)
 except ClientError as e:
     print(e)
 
@@ -49,7 +81,7 @@ for Ids in imageid:
            ImageId=Ids,
            MinCount=1,
            MaxCount=1,
-           InstanceType='t2.micro',
+           InstanceType='t2.xlarge',
            KeyName='sampledocker',
            SecurityGroupIds= [ security_group_id ],
 
@@ -66,30 +98,43 @@ for Ids in imageid:
                ]
            )
 
-time.sleep(80)
+time.sleep(120)
 details = ec2.instances.all()
 print(details)
+
 
 """ details is a variable and assing to ec2.instances.all"""
 
 for inst in details:
     if inst.public_ip_address != None:
         print(inst.public_ip_address)
-        time.sleep(5)
+        time.sleep(30)
         try:
             user = ["ec2-user", "ubuntu"]
             for x in user:
                 print(x)
                 if x:
-                    ssh = paramiko.SSHClient()
-                    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                    password = './sampledocker.pem'
-                    keypath = paramiko.RSAKey.from_private_key_file(password)
-                    print(keypath)
-                    print('inst.public_ip_address' + "public ip")
-                    ssh.connect( inst.public_ip_address, username=x, pkey = keypath )
-                    print("connected")
-            #    print("This is a valid user")
+                    if (x == "ec2-user"):
+                        ssh = paramiko.SSHClient()
+                        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                        password = './sampledocker.pem'
+                        print(password)
+                        keypath = paramiko.RSAKey.from_private_key_file(password)
+                        print(keypath)
+                        print('inst.public_ip_address' + "public ip")
+                        ssh.connect( inst.public_ip_address, username=x, pkey = keypath )
+                        print("connectedi with ec2-user")
+                    elif (x == "ubuntu"):
+                        ssh = paramiko.SSHClient()
+                        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                        password = './sampledocker.pem'
+                        print(password)
+                        keypath = paramiko.RSAKey.from_private_key_file(password)
+                        print(keypath)
+                        print('inst.public_ip_address' + "public ip")
+                        ssh.connect( inst.public_ip_address, username=x, pkey = keypath )
+                        print("connectedi with ubuntu")
+            
                 else:
                     ssh = paramiko.SSHClient()
                     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -98,7 +143,7 @@ for inst in details:
                     print(keypath)
                     print('inst.public_ip_address' + "public ip")
                     ssh.connect( inst.public_ip_address, username=x, pkey = keypath )
-                    print("connected")
+                    print("connected with ubuntu")
 
         except:
             print("Authentication Failure")
