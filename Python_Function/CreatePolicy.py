@@ -6,7 +6,6 @@ import json
 def create_role():
     client = boto3.client('iam', aws_access_key_id = input("aws_secret_key"), aws_secret_access_key = input("aws_secret_key"))
     try:
-        print("INSIDE")
         my_managed_policy = {
             "Version": "2012-10-17",
             "Statement": [
@@ -27,8 +26,6 @@ def create_role():
                 }
             ]
         }
-        print("insride2")
-
         response = client.create_policy(
             PolicyName = 'myDynamoDBPolicy_dup_one',
             PolicyDocument = json.dumps(my_managed_policy)
