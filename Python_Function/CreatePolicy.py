@@ -4,7 +4,7 @@ import boto3
 import json
 
 def create_role():
-    client = boto3.client('iam', aws_access_key_id = input(aws_secret_key), aws_secret_access_key = input(aws_secret_key))
+    client = boto3.client('iam', aws_access_key_id = input("aws_secret_key"), aws_secret_access_key = input("aws_secret_key"))
     try:
         print("INSIDE")
         my_managed_policy = {
