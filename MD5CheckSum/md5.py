@@ -1,20 +1,40 @@
 import hashlib 
-def algorithm():
-    with open("./test.csv", "rb") as f :
-        hash_type = hashlib.md5()
-        while temp := f.read(4082):
-            hash_type.update(temp)
-            hash_type_digest = hash_type.hexdigest()
-            #print(hash_type_digest)
-    return(hash_type_digest)
+import os
+import glob
+from datetime import datetime
 
-def writeline():
-    file = open("./hashtag.txt", "w")
-    file.write(algorithm())
-    file.close()
-    print(file)
+def timeanddate():
+    timeanddate = datetime.now()
+    today_date = timeanddate.strftime("%d %B %y %H:%M:%S")
+    print(today_date)
+
+
+def algorithm():
+    path = os.listdir('./')
+    for x in path :
+        if ".csv" in x :
+            file_path = os.path.abspath(x)
+            created_time = os.path.getmtime(file_path)
+        #print(created_time)
+            date_time = datetime.fromtimestamp(created_time)
+        #print(date_time)
+            list_of_files = glob.glob(file_path)
+            print(list_of_files)
+            latest_file = max(list_of_files, key=os.path.getctime)
+           # print(latest_file+ "life_style")
+            with open(file_path, "rb") as f :
+                hash_type = hashlib.md5()
+                while temp := f.read(4082):
+                    hash_type.update(temp)
+                    hash_type_digest = hash_type.hexdigest()
+                    file = open("./hashtag.txt", 'a')
+                    file.write("{}|{}|{}\n".format(file_path,hash_type_digest,date_time))
+                    file.close()
+                    print(file)
+        else :
+            print("One file is failed That is apart from csv")
 
 if __name__ == "__main__" :
-    print("INN")
-    print(algorithm())
-    writeline()
+    algorithm()
+    timeanddate()
+ 
