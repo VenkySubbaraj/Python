@@ -15,13 +15,9 @@ def algorithm():
         if ".csv" in x :
             file_path = os.path.abspath(x)
             created_time = os.path.getmtime(file_path)
-        #print(created_time)
             date_time = datetime.fromtimestamp(created_time)
-        #print(date_time)
             list_of_files = glob.glob(file_path)
-            print(list_of_files)
             latest_file = max(list_of_files, key=os.path.getctime)
-           # print(latest_file+ "life_style")
             with open(file_path, "rb") as f :
                 hash_type = hashlib.md5()
                 while temp := f.read(4082):
