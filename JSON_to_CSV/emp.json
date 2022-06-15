@@ -2,12 +2,12 @@
 	"emp_details": [
 		{
 			"emp_name":"rifaz",
-			"email" : "venkatmsc@gmail.com",
+			"email" : "abc@gmail.com",
 			"job_profile": "intern"
 		},
 		{
-			"emp_name":"rifaz",
-			"email" : "venkatmsc@gmail.com",
+			"emp_name":"venkat",
+			"email" : "abc@gmail.com",
 			"job_profile": "intern"
 		}
 	]
