@@ -123,6 +123,6 @@ def create_crawler_jobs():
     )
 if __name__ == "__main__":
     create_crawler_jobs()
-    # s3_crawler_create()
-    # Redshift_crawler_create()
-    # glue_connection_create()
+     s3_crawler_create()
+     Redshift_crawler_create()
+     glue_connection_create()
