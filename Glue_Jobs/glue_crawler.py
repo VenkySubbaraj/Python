@@ -1,9 +1,17 @@
+
+from __future__ import print_function
 from distutils.cmd import Command
 from sqlite3 import Connection
 import boto3
 import json
+import time
+import sys
+import time
+from datetime import datetime
+
 
 client = boto3.client('glue', region_name="ap-south-1")
+s3 = boto3.client('s3')
 
 def s3_crawler_create() :
     response = client.create_crawler(
@@ -13,7 +21,7 @@ def s3_crawler_create() :
         Targets={
             'S3Targets': [
                 {
-                    'Path': 's3://dockercontainer1',
+                    'Path': 's3://mg-nab/Team3/',
                 }
             ]
         },
@@ -77,6 +85,7 @@ def glue_connection_create():
             }
         }
     )
+    print(response1)
 
 def create_crawler_jobs():
     response =   client.create_job(
@@ -90,7 +99,7 @@ def create_crawler_jobs():
             'ScriptLocation': 's3://aws-glue-scripts-780467203909-ap-south-1/root/',
             'PythonVersion': '3'
         },
-         Connections={
+        Connections={
         'Connections': [
             'REDSHIFT_JDBC_CONNECTION',
             ]
@@ -121,8 +130,25 @@ def create_crawler_jobs():
             }
         }    
     )
+    print(response)
+
+def lambda_handler():
+    gluejobname="PARQUEET_JOBS"
+
+    try:
+        runId = client.start_job_run(JobName=gluejobname)
+        status = client.get_job_run(JobName=gluejobname, RunId=runId['JobRunId'])
+        print("Job Status : ", status['JobRun']['JobRunState'])
+    except Exception as e:
+        print(e)
+        print('Error getting object {} from bucket {}. Make sure they exist '
+              'and your bucket is in the same region as this '
+              'function.'.format(source_bucket, source_bucket))
+    print(e)
+
 if __name__ == "__main__":
     create_crawler_jobs()
-     s3_crawler_create()
-     Redshift_crawler_create()
-     glue_connection_create()
+    s3_crawler_create()
+    Redshift_crawler_create()
+    glue_connection_create()
+    lambda_handler()
