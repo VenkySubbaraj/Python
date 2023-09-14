@@ -1,0 +1,19 @@
+name: Send Message
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Send Message
+        run: |
+          # Replace <YOUR_URL> and <YOUR_MESSAGE> with your actual URL and message
+          curl -X POST -d "message=<YOUR_MESSAGE>" ${{ secrets.webhook_url }}
