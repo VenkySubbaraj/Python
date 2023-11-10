@@ -1,0 +1,40 @@
+name: workflow trigger notification
+
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      env: 
+        description: 'Choose the environment'
+        required: true
+        type: choice
+        options:
+        - dev
+        - ffdp-stage
+        - ffdp-preprod
+        - ffdp-prod
+
+jobs:
+  performs-deployment:
+    name: Deploying ETL scripts to ffdp-dev
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download release artifact
+        id: error-message
+        uses: robinraju/release-downloader@v1.8
+  
+  send-message-to-ms-teams:
+    uses: ./.github/workflows/alerts-testing.yaml
+    if: failure()
+    needs:
+      - performs-deployment  
+    with:
+      env: ${{ github.event.inputs.env }}
+    secrets:  
+      web_url: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}       
