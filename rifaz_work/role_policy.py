@@ -18,19 +18,6 @@ role_name = 'testing_role'
 role_file_path = './s3_role.json'
 with open(role_file_path, 'r') as role_file:
     assume_role_policy_document = json.load(role_file)
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "s3.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-        }
-    ]
-}
-
 role_response = iam_client.create_role(
     RoleName=role_name,
     AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
