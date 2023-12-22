@@ -1,7 +1,7 @@
 import boto3
 import json
 
-iam_client = boto3.client('iam')
+iam_client = boto3.client('iam', aws_access_key_id = input("aws_secret_key"), aws_secret_access_key = input("aws_secret_key"))
 policy_file_path = './s3_policy.json'
 with open(policy_file_path, 'r') as policy_file:
     policy_document = json.load(policy_file)
