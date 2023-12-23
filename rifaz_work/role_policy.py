@@ -1,12 +1,15 @@
 import boto3
 import json
 
-iam_client = boto3.client('iam', aws_access_key_id = input("aws_secret_key"), aws_secret_access_key = input("aws_secret_key"))
-policy_file_path = './s3_policy.json'
-with open(policy_file_path, 'r') as policy_file:
-    policy_document = json.load(policy_file)
+json_file_path= './s3_policy.json'
 
-policy_name = 's3_policy'
+iam_client = boto3.client('iam')
+with open(json_file_path, 'r') as policy_file:
+    policy_document = json.load(policy_file)
+    print(policy_document)
+
+policy_name = 's3_testin__policy'
+
 response = iam_client.create_policy(
     PolicyName=policy_name,
     PolicyDocument=json.dumps(policy_document)
@@ -14,10 +17,23 @@ response = iam_client.create_policy(
 
 policy_arn = response['Policy']['Arn']
 
-role_name = 'testing_role'
+role_name = 'testing1_role'
 role_file_path = './s3_role.json'
 with open(role_file_path, 'r') as role_file:
     assume_role_policy_document = json.load(role_file)
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "s3.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+
 role_response = iam_client.create_role(
     RoleName=role_name,
     AssumeRolePolicyDocument=json.dumps(assume_role_policy_document)
