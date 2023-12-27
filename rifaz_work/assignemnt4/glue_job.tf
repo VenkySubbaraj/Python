@@ -12,7 +12,7 @@ command {
 resource "aws_glue_trigger" "sample_assignment4_glue_job_trigger" {
   name   = "sample_assignment4_glue_job_trigger"
   type   = "SCHEDULED"
-  schedule = "cron(0 6 * * ? *)" 
+  schedule = "cron(0 1 * * ? *)" 
   
   actions {
     job_name = aws_glue_job.sample_assignment4_glue_job.name
