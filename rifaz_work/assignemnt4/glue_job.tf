@@ -1,24 +1,21 @@
-resource "aws_glue_job" "example_glue_job" {
-  name          = "example_glue_job"
-  role_arn      = aws_iam_role.glue_role.arn
-  command       = "glueetl"
-  script        = file("path/to/your/glue_script.py")  # Path to your PySpark script
-  python_version = "3"
+resource "aws_glue_job" "sample_assignment4_glue_job" {
+  name          = "sample_assignment4_glue_job"
+  role_arn      = "arn:aws:iam::667289912626:role/testing1_role"
+  glue_version  = "4.0"
+command {
 
-  # Additional Glue job settings, if needed
-  # ...
-
-  depends_on = [aws_iam_role.glue_role]
+    script_location = "s3://rifazdec24/pyspark/pyspark.py"
+    python_version = "3"
+  }
 }
 
-resource "aws_glue_trigger" "example_trigger" {
-  name   = "example_trigger"
+resource "aws_glue_trigger" "sample_assignment4_glue_job_trigger" {
+  name   = "sample_assignment4_glue_job_trigger"
   type   = "SCHEDULED"
-  schedule = "cron(0 0 * * ? *)"  # Example schedule: Daily at midnight UTC
+  schedule = "cron(0 6 * * ? *)" 
   
   actions {
-    job_name = aws_glue_job.example_glue_job.name
+    job_name = aws_glue_job.sample_assignment4_glue_job.name
   }
-
-  depends_on = [aws_glue_job.example_glue_job]
+  depends_on = [aws_glue_job.sample_assignment4_glue_job]
 }
