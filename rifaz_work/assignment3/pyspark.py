@@ -5,7 +5,7 @@ from pyspark.sql.functions import lit
 spark = SparkSession.builder.appName("S3ReadWriteExample").getOrCreate()
 
 s3_input_path = "s3://rifazdec24/sample_date.csv"
-s3_output_path = "s3://rifazdec24/output/sample_date"
+s3_output_path = "s3://rifazdec24/output/sample_date.csv"
 
 df = spark.read.csv(s3_input_path, header=True, inferSchema=True)
 
