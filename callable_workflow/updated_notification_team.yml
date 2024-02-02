@@ -1,0 +1,56 @@
+name: notify-teams-on-failure
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: false
+        type: string
+    secrets:
+      webhook_uri:
+        required: true
+
+jobs:
+  notify-failure:
+    name: Notify Teams on Failure
+    runs-on: ubuntu-latest    
+    steps:   
+      - name: Set current time in CET
+        id: set-time
+        run: echo "current_time=$(TZ='CET' date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+
+      - name: Send a message to Microsoft Teams
+        uses: aliencube/microsoft-teams-actions@v0.8.0
+        env:
+          BRANCH_NAME: ${{ github.ref_name }} 
+          CURRENT_TIME: ${{ steps.set-time.outputs.current_time }}
+          GH_ACTOR: ${{ github.actor }}
+        with:
+          webhook_uri: ${{ secrets.webhook_uri }}
+          title: '${{ inputs.env }} ${{ github.workflow }} workflow failed' 
+          theme_color: 'FF0000'
+          summary: ${{ github.repository }}
+          sections: '[{ "activityTitle": "${{ github.repository }} ${{inputs.env}}" }, 
+              { "facts": [
+                  {
+                  "name": "Build:",
+                  "value": "https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}"
+                  },
+                  {
+                  "name": "Commit:",
+                  "value": "https://github.com/${{github.repository}}/commit/${{github.event.head_commit.id}}"
+                  }, 
+                  {
+                  "name": "Branch Name:",
+                  "value": "${{env.BRANCH_NAME}}"
+                  },
+                  {
+                  "name": "Actor:",
+                  "value": "${{ env.GH_ACTOR }}"
+                  },
+                  {
+                    "name": "Timestamp (CET):",
+                    "value": "${{ env.CURRENT_TIME }}"
+                  }                            
+              ]
+              }]'
