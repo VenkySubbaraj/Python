@@ -10,3 +10,6 @@ terraform plan -out tf.plan
 terraform show -json tf.plan > tf.json
 pip install checkov
 checkov -f tf.json
+
+
+
