@@ -25,7 +25,7 @@ def replacement_fn(replacement_char, string):
 
 def main():
     replacement_char = "*"
-    string = "sarathy"
+    string = "rifaz"
     replacement_fn(replacement_char, string)
 
 if __name__ == "__main__":
