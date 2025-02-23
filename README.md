@@ -5,7 +5,6 @@
 
 
 **Checkov Checks**
-
 ```
 terraform plan -out tf.plan
 terraform show -json tf.plan > tf.json
