@@ -41,8 +41,6 @@ Note: \ is used to point the next line in cmd
 INSTALLATION COMMANDS:
 **********************************************
 ```
-Splitted lines
-****************
 sudo virt-install \	!its a kernel vm
 --virt-type=kvm \
 --name centos7 \	!os version
@@ -57,9 +55,7 @@ sudo virt-install \	!its a kernel vm
  --check all=off ! it will not displays any issue
  
  (or)
-  
- Single Line commands:
-************************
+
  virt-install --network bridge:br0 --name centos --ram=2048 --vcpu=2 --os-variant=centos7.0 --disk path=/(userdefined),size=(userdefine) --graphics (none) or (vnc) --location=(define the place of the os file where it is located) --check all=off
  ```
  
