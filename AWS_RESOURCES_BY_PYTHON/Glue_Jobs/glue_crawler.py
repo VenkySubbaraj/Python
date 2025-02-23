@@ -139,6 +139,10 @@ def lambda_handler():
         runId = client.start_job_run(JobName=gluejobname)
         status = client.get_job_run(JobName=gluejobname, RunId=runId['JobRunId'])
         print("Job Status : ", status['JobRun']['JobRunState'])
+        create_crawler_jobs()
+        s3_crawler_create()
+        Redshift_crawler_create()
+        glue_connection_create()
     except Exception as e:
         print(e)
         print('Error getting object {} from bucket {}. Make sure they exist '
@@ -146,9 +150,3 @@ def lambda_handler():
               'function.'.format(source_bucket, source_bucket))
     print(e)
 
-if __name__ == "__main__":
-    create_crawler_jobs()
-    s3_crawler_create()
-    Redshift_crawler_create()
-    glue_connection_create()
-    lambda_handler()
