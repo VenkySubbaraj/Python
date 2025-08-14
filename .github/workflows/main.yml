@@ -28,7 +28,10 @@ jobs:
       - name: Push changes
         run: |
           git add .
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "feature make contribution"        
+          git push 
         # with:
         #   branch: daily-contribution
         #   # Set the Git credentials - replace this with your own secrets
