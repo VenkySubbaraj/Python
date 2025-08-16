@@ -90,3 +90,4 @@ virsh shutdown <vm name> // to shut down the running os
 virsh undefine <vm name> // to unregister the domain name
 virsh destory <vm name> // to delete the os
 ```
+Sat Aug 16 01:47:09 UTC 2025
