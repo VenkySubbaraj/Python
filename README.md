@@ -91,3 +91,4 @@ virsh undefine <vm name> // to unregister the domain name
 virsh destory <vm name> // to delete the os
 ```
 Sat Aug 16 01:47:09 UTC 2025
+Sun Aug 17 01:58:04 UTC 2025
